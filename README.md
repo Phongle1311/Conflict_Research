@@ -1,1 +1,1 @@
-# Map_JA_Android
+# Violence Conflict Research JA App

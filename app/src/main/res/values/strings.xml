@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Conflict Research Application</string>
+    <string name="google_api_key">AIzaSyAIEFgyy_kbf_cwbUPq2b62UamZFPdPCcs</string>
+
 </resources>

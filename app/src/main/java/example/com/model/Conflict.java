@@ -47,6 +47,13 @@ public class Conflict {
     String latitude;
     String longitude;
     String country;
+    boolean isLoading;
+
+    public Conflict() {}
+
+    public Conflict(boolean isLoading) {
+        this.isLoading = isLoading;
+    }
 
     public Conflict(String id, String conflict_name, String latitude, String longitude, String country) {
         this.id = id;
@@ -254,5 +261,14 @@ public class Conflict {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+
+    public boolean isLoading() {
+        return isLoading;
+    }
+
+    public void setLoading(boolean loading) {
+        isLoading = loading;
     }
 }

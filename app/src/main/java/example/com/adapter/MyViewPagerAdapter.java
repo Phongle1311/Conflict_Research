@@ -20,7 +20,8 @@ public class MyViewPagerAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         if (position == 1) {
-            return new MapFragment();
+//            return new MapFragment();
+            return new ListFragment();
         }
         return new ListFragment();
     }

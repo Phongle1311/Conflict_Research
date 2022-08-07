@@ -6,31 +6,33 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import example.com.ConflictsViewModel;
+import example.com.PaginationScrollListener;
 import example.com.R;
 import example.com.adapter.ConflictAdapter;
-import example.com.api.ApiService;
-import example.com.model.Conflict;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
+/**
+ * <h3>Fragment to show list of conflicts using recyclerview</h3>
+ * <ul>
+ *     <li>Using pagination scroll listener for better performance</li>
+ * </ul>
+ */
 public class ListFragment extends Fragment {
-    FragmentActivity listener;
-    List<Conflict> conflicts;
-    ConflictAdapter conflictAdapter;
-    RecyclerView rcvConflicts;
+
+    FragmentActivity    listener;
+    ConflictAdapter     conflictAdapter;
+    RecyclerView        rcvConflicts;
+    ConflictsViewModel  viewModel;
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -51,17 +53,9 @@ public class ListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_list, container, false);
-
         rcvConflicts = rootView.findViewById(R.id.rcv_conflicts);
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(listener);
-        rcvConflicts.setLayoutManager(linearLayoutManager);
-
-        conflicts = new ArrayList<>();
-        conflictAdapter = new ConflictAdapter(conflicts);
-        rcvConflicts.setAdapter(conflictAdapter);
-
-        callApiGetConflicts();
+        viewModel = new ViewModelProvider(requireActivity()).get(ConflictsViewModel.class);
+        conflictAdapter = new ConflictAdapter();
 
         return rootView;
     }
@@ -69,30 +63,44 @@ public class ListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // set up for recyclerview
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(listener);
+        rcvConflicts.setLayoutManager(linearLayoutManager);
+        rcvConflicts.setAdapter(conflictAdapter);
+
+        // implement abstract class PaginationScrollListener to call API when scroll to end
+        rcvConflicts.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
+
+            @Override
+            public void loadMoreItems() {
+                viewModel.callApiGetConflicts();
+            }
+
+            @Override
+            public boolean isLoading() {
+                return viewModel.isLoading();
+            }
+        });
+
+
+        // when conflicts list change, update recyclerview - notify dataset changed
+        viewModel.getConflictsMutableLiveData().observe(getViewLifecycleOwner(), list -> {
+            if (conflictAdapter != null) {
+                int oldSize = conflictAdapter.getItemCount();
+                conflictAdapter.setData(list);
+                conflictAdapter.notifyItemRangeChanged(oldSize, list.size());
+            }
+        });
+
+        // call for the first time (no need scrolling)
+        viewModel.callApiGetConflicts();
     }
 
+    // release context
     @Override
     public void onDetach() {
         super.onDetach();
         listener = null;
-    }
-
-    void callApiGetConflicts() {
-        ApiService.service.getListConflicts("test_ucdp_ged181", "secret", 10, 1).enqueue(new Callback<List<Conflict>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<Conflict>> call, @NonNull Response<List<Conflict>> response) {
-                List<Conflict> list = response.body();
-                if (list != null){
-                    int oldSize = conflicts.size();
-                    conflicts.addAll(list);
-                    conflictAdapter.notifyItemRangeChanged(oldSize, list.size());
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<Conflict>> call, @NonNull Throwable t) {
-                Toast.makeText(listener, "onFailure", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }

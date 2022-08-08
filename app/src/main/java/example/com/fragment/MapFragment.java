@@ -1,60 +1,53 @@
 package example.com.fragment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.util.ArrayList;
+import com.google.maps.android.clustering.ClusterManager;
 
 import example.com.ConflictsViewModel;
-import example.com.R;
+import example.com.MyClusterItem;
 import example.com.model.Conflict;
 
-//public class MapFragment extends Fragment {
-//
-//    @Nullable
-//    @Override
-//    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        return inflater.inflate(R.layout.fragment_map, container, false);
-//    }
-//}
 
 public class MapFragment extends SupportMapFragment implements OnMapReadyCallback {
 
     GoogleMap googleMap;
     ConflictsViewModel viewModel;
-    MarkerOptions options = new MarkerOptions();
+    ClusterManager<MyClusterItem> clusterManager;
+    Context listener;
     int count = 0;
 
     public MapFragment()  {
         getMapAsync(this);
     }
 
+    @Override
+    public void onAttach(@NonNull Activity activity) {
+        super.onAttach(activity);
+        this.listener = (FragmentActivity) activity;
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
     }
 
     @Override
     public void onMapReady(@NonNull final GoogleMap googleMap) {
         this.googleMap = googleMap;
+
+        setUpClusterer();
 
         viewModel = new ViewModelProvider(requireActivity()).get(ConflictsViewModel.class);
         // when data is updated, add market to map
@@ -66,32 +59,33 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
                 // if isn't loading item, add marker
                 if (!conflict.isLoading()) {
-                    LatLng point = new LatLng(Float.parseFloat(conflict.getLatitude()),
-                            Float.parseFloat(conflict.getLongitude()));
-                    options.position(point);
+                    double lat = Double.parseDouble(conflict.getLatitude());
+                    double lng = Double.parseDouble(conflict.getLongitude());
                     String title = conflict.getConflictName();
+                    String snippet = "add desc ...";
+
                     if (title.length() > 10) {
                         title = title.substring(0, 10) + "...";
                     }
-                    options.title(title);
-                    options.snippet("add desc ...");
-                    googleMap.addMarker(options);
+
+                    MyClusterItem offsetItem = new MyClusterItem(lat, lng, title, snippet);
+                    clusterManager.addItem(offsetItem);
+
                     count++;
                 }
             }
         });
+    }
 
-//        LatLng vietnam = new LatLng(14.0583, 108.2772);
-//        this.googleMap.addMarker(new MarkerOptions().position(vietnam).title("Marker in Vietnam"));
-//        this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(vietnam));
-//
-//        this.googleMap.setOnMapClickListener(latLng -> {
-//            MarkerOptions markerOptions = new MarkerOptions();
-//            markerOptions.position(latLng);
-//            markerOptions.title(latLng.latitude + " : "+ latLng.longitude);
-//            this.googleMap.clear();
-//            this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
-//            this.googleMap.addMarker(markerOptions);
-//        });
+    void setUpClusterer() {
+        // sửa lại thành việt nam
+//        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.503186, -0.126446), 10));
+
+        clusterManager = new ClusterManager<>(listener, googleMap);
+
+        clusterManager.setAnimation(false);
+
+        googleMap.setOnCameraIdleListener(clusterManager);
+        googleMap.setOnMarkerClickListener(clusterManager); // nghiên cứu sau
     }
 }

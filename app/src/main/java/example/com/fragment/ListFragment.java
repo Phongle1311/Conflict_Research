@@ -3,7 +3,6 @@ package example.com.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,7 +93,6 @@ public class ListFragment extends Fragment {
                 //      --- Recyclerview - Cannot call this method in a scroll callback
                 rcvConflicts.post(() -> conflictAdapter.notifyItemRangeChanged(oldSize,
                         list.size() - oldSize + 1));
-                Log.d("tag", list.size()+"");
             }
         });
 

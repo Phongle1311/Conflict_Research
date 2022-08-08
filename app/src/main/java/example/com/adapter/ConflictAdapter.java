@@ -2,7 +2,6 @@ package example.com.adapter;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +62,6 @@ public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 return;
 
             ConflictViewHolder conflictViewHolder = (ConflictViewHolder) holder;
-//            Log.d("tag", "bind - type item: "+conflict.getConflictName());
 
             conflictViewHolder.tvConflictName.setText(conflict.getConflictName());
             int totalDeaths = Integer.parseInt(conflict.getDeathsA())
@@ -74,31 +72,80 @@ public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             conflictViewHolder.tvCountry.setText(conflict.getCountry());
             conflictViewHolder.tvWhereCoordinates.setText(String.valueOf(conflict.getWhereCoordinates()));
             conflictViewHolder.vToggle.setVisibility(View.GONE);
+            conflictViewHolder.tvSideA.setText(conflict.getSideA());
+            conflictViewHolder.tvSideB.setText(conflict.getSideB());
+
+            String adm1 = conflict.getAdm1();
+            String adm2 = conflict.getAdm2();
+            if (adm1 == null || adm1.equals("")) {
+                conflictViewHolder.tvAdm1.setVisibility(View.GONE);
+            }
+            else {
+                conflictViewHolder.tvAdm1.setText(String.format("adm1: %s", adm1));
+            }
+            if (adm2 == null || adm2.equals("")) {
+                conflictViewHolder.tvAdm2.setVisibility(View.GONE);
+            }
+            else {
+                conflictViewHolder.tvAdm2.setText(String.format("adm2: %s", adm2));
+            }
+
+            conflictViewHolder.tvSourceArticle.setText(conflict.getSourceArticle());
+            String sourceOriginal = conflict.getSourceOriginal();
+            if (sourceOriginal == null || sourceOriginal.equals("")) {
+                conflictViewHolder.tvSourceOriginal.setVisibility(View.GONE);
+            }
+            else {
+                conflictViewHolder.tvSourceOriginal.setText(String.format("(%s)", sourceOriginal));
+            }
+
             conflictViewHolder.setOnClickItemListener();
         }
     }
 
     public static class ConflictViewHolder extends RecyclerView.ViewHolder{
-        final View vItem;
-        final TextView tvConflictName;
-        final TextView tvTotalDeaths;
-        final TextView tvCountry;
-        final TextView tvWhereCoordinates;
-        final View vToggle;
+        final View      vItem;
+        final TextView  tvConflictName;
+        final TextView  tvTotalDeaths;
+        final TextView  tvCountry;
+        final TextView  tvWhereCoordinates;
+        final View      vToggle;
+        final TextView  tvSideA;
+        final TextView  tvSideB;
+        final TextView  tvAdm1;
+        final TextView  tvAdm2;
+        final TextView  tvSourceArticle;
+        final TextView  tvSourceOriginal;
+        boolean         isSelected;
 
         public ConflictViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            vItem = itemView;
-            tvConflictName = itemView.findViewById(R.id.tv_conflict_name);
-            tvTotalDeaths = itemView.findViewById(R.id.tv_total_deaths);
-            tvCountry = itemView.findViewById(R.id.tv_country);
-            tvWhereCoordinates = itemView.findViewById(R.id.tv_where_coordinates);
-            vToggle = itemView.findViewById(R.id.v_toggle);
+            vItem               = itemView;
+            tvConflictName      = itemView.findViewById(R.id.tv_conflict_name);
+            tvTotalDeaths       = itemView.findViewById(R.id.tv_total_deaths);
+            tvCountry           = itemView.findViewById(R.id.tv_country);
+            tvWhereCoordinates  = itemView.findViewById(R.id.tv_where_coordinates);
+            tvSideA             = itemView.findViewById(R.id.tv_side_A);
+            tvSideB             = itemView.findViewById(R.id.tv_side_B);
+            tvAdm1              = itemView.findViewById(R.id.tv_adm_1);
+            tvAdm2              = itemView.findViewById(R.id.tv_adm_2);
+            tvSourceArticle     = itemView.findViewById(R.id.tv_source_article);
+            tvSourceOriginal    = itemView.findViewById(R.id.tv_source_original);
+            vToggle             = itemView.findViewById(R.id.v_toggle);
+            isSelected          = false;
         }
 
         public void setOnClickItemListener() {
             vItem.setOnClickListener(view->{
+                if (isSelected) {
+                    vItem.setBackgroundResource(R.drawable.normal_border);
+                }
+                else {
+                    vItem.setBackgroundResource(R.drawable.selected_border);
+                }
+                isSelected = !isSelected;
+
                 if (vToggle.getVisibility() == View.VISIBLE) {
                     vToggle.animate()
                             .alpha(0.0f)

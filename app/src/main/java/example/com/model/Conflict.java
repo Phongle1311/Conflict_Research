@@ -44,6 +44,10 @@ public class Conflict {
     String sourceOriginal;
     @SerializedName("where_coordinates")
     String whereCoordinates;
+    @SerializedName("adm_1")
+    String adm1;
+    @SerializedName("adm_2")
+    String adm2;
     String latitude;
     String longitude;
     String country;
@@ -237,6 +241,22 @@ public class Conflict {
 
     public void setWhereCoordinates(String whereCoordinates) {
         this.whereCoordinates = whereCoordinates;
+    }
+
+    public String getAdm1() {
+        return adm1;
+    }
+
+    public void setAdm1(String adm1) {
+        this.adm1 = adm1;
+    }
+
+    public String getAdm2() {
+        return adm2;
+    }
+
+    public void setAdm2(String adm2) {
+        this.adm2 = adm2;
     }
 
     public String getLatitude() {

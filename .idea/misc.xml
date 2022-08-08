@@ -3,9 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/phong/Android/Violence_Conflict_Research_JA_App/app/src/main/res/drawable/my_border.xml" value="0.2085" />
+        <entry key="..\:/phong/Android/Violence_Conflict_Research_JA_App/app/src/main/res/drawable/selected_border.xml" value="0.1075" />
+        <entry key="..\:/phong/Android/Violence_Conflict_Research_JA_App/app/src/main/res/font/font.xml" value="0.19907407407407407" />
         <entry key="..\:/phong/Android/Violence_Conflict_Research_JA_App/app/src/main/res/layout/activity_main.xml" value="0.21739130434782608" />
         <entry key="..\:/phong/Android/Violence_Conflict_Research_JA_App/app/src/main/res/layout/fragment_list.xml" value="0.2501302761855133" />
-        <entry key="..\:/phong/Android/Violence_Conflict_Research_JA_App/app/src/main/res/layout/item_conflict.xml" value="0.1" />
+        <entry key="..\:/phong/Android/Violence_Conflict_Research_JA_App/app/src/main/res/layout/item_conflict.xml" value="0.6710144927536232" />
         <entry key="..\:/phong/Android/Violence_Conflict_Research_JA_App/app/src/main/res/layout/item_progress.xml" value="0.21739130434782608" />
       </map>
     </option>

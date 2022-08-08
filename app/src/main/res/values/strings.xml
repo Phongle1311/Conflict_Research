@@ -1,5 +1,14 @@
 <resources>
     <string name="app_name">Conflict Research Application</string>
     <string name="google_api_key">AIzaSyAIEFgyy_kbf_cwbUPq2b62UamZFPdPCcs</string>
+    <string name="country">Country:</string>
+    <string name="deaths">Deaths:</string>
+    <string name="deaths_of_b">Deaths of B</string>
+    <string name="deaths_of_civilians">Deaths of civilians</string>
+    <string name="unknown">Unknown</string>
+    <string name="side_a">Side A:</string>
+    <string name="side_b">Side B:</string>
+    <string name="source">Source:</string>
+    <string name="deaths_of_a">Deaths of A</string>
 
 </resources>

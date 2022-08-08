@@ -10,6 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.eazegraph.lib.charts.PieChart;
+import org.eazegraph.lib.models.PieModel;
+
 import java.util.List;
 
 import example.com.R;
@@ -63,11 +66,15 @@ public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             ConflictViewHolder conflictViewHolder = (ConflictViewHolder) holder;
 
+            int deathsA         = Integer.parseInt(conflict.getDeathsA());
+            int deathsB         = Integer.parseInt(conflict.getDeathsB());
+            int deathsCivilians = Integer.parseInt(conflict.getDeathsCivilians());
+            int deathsUnknown   = Integer.parseInt(conflict.getDeathsUnknown());
+            int totalDeaths     = deathsA + deathsB + deathsCivilians + deathsUnknown;
+            String adm1         = conflict.getAdm1();
+            String adm2         = conflict.getAdm2();
+
             conflictViewHolder.tvConflictName.setText(conflict.getConflictName());
-            int totalDeaths = Integer.parseInt(conflict.getDeathsA())
-                    + Integer.parseInt(conflict.getDeathsB())
-                    + Integer.parseInt(conflict.getDeathsCivilians())
-                    + Integer.parseInt(conflict.getDeathsUnknown());
             conflictViewHolder.tvTotalDeaths.setText(String.valueOf(totalDeaths));
             conflictViewHolder.tvCountry.setText(conflict.getCountry());
             conflictViewHolder.tvWhereCoordinates.setText(String.valueOf(conflict.getWhereCoordinates()));
@@ -75,8 +82,13 @@ public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             conflictViewHolder.tvSideA.setText(conflict.getSideA());
             conflictViewHolder.tvSideB.setText(conflict.getSideB());
 
-            String adm1 = conflict.getAdm1();
-            String adm2 = conflict.getAdm2();
+            conflictViewHolder.setDataChart(deathsA, deathsB, deathsCivilians, deathsUnknown);
+
+            conflictViewHolder.tvNumberDeathsOfA.setText(conflict.getDeathsA());
+            conflictViewHolder.tvNumberDeathsOfB.setText(conflict.getDeathsB());
+            conflictViewHolder.tvNumberDeathsOfCivilians.setText(conflict.getDeathsCivilians());
+            conflictViewHolder.tvNumberUnknownDeaths.setText(conflict.getDeathsUnknown());
+
             if (adm1 == null || adm1.equals("")) {
                 conflictViewHolder.tvAdm1.setVisibility(View.GONE);
             }
@@ -110,6 +122,11 @@ public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         final TextView  tvCountry;
         final TextView  tvWhereCoordinates;
         final View      vToggle;
+        final PieChart  chartDeaths;
+        final TextView  tvNumberDeathsOfA;
+        final TextView  tvNumberDeathsOfB;
+        final TextView  tvNumberDeathsOfCivilians;
+        final TextView  tvNumberUnknownDeaths;
         final TextView  tvSideA;
         final TextView  tvSideB;
         final TextView  tvAdm1;
@@ -121,19 +138,24 @@ public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public ConflictViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            vItem               = itemView;
-            tvConflictName      = itemView.findViewById(R.id.tv_conflict_name);
-            tvTotalDeaths       = itemView.findViewById(R.id.tv_total_deaths);
-            tvCountry           = itemView.findViewById(R.id.tv_country);
-            tvWhereCoordinates  = itemView.findViewById(R.id.tv_where_coordinates);
-            tvSideA             = itemView.findViewById(R.id.tv_side_A);
-            tvSideB             = itemView.findViewById(R.id.tv_side_B);
-            tvAdm1              = itemView.findViewById(R.id.tv_adm_1);
-            tvAdm2              = itemView.findViewById(R.id.tv_adm_2);
-            tvSourceArticle     = itemView.findViewById(R.id.tv_source_article);
-            tvSourceOriginal    = itemView.findViewById(R.id.tv_source_original);
-            vToggle             = itemView.findViewById(R.id.v_toggle);
-            isSelected          = false;
+            vItem                       = itemView;
+            tvConflictName              = itemView.findViewById(R.id.tv_conflict_name);
+            tvTotalDeaths               = itemView.findViewById(R.id.tv_total_deaths);
+            tvCountry                   = itemView.findViewById(R.id.tv_country);
+            tvWhereCoordinates          = itemView.findViewById(R.id.tv_where_coordinates);
+            chartDeaths                 = itemView.findViewById(R.id.chart_deaths);
+            tvNumberDeathsOfA           = itemView.findViewById(R.id.tv_number_deaths_of_a);
+            tvNumberDeathsOfB           = itemView.findViewById(R.id.tv_number_deaths_of_b);
+            tvNumberDeathsOfCivilians   = itemView.findViewById(R.id.tv_number_deaths_of_civilians);
+            tvNumberUnknownDeaths       = itemView.findViewById(R.id.tv_number_unknown_deaths);
+            tvSideA                     = itemView.findViewById(R.id.tv_side_A);
+            tvSideB                     = itemView.findViewById(R.id.tv_side_B);
+            tvAdm1                      = itemView.findViewById(R.id.tv_adm_1);
+            tvAdm2                      = itemView.findViewById(R.id.tv_adm_2);
+            tvSourceArticle             = itemView.findViewById(R.id.tv_source_article);
+            tvSourceOriginal            = itemView.findViewById(R.id.tv_source_original);
+            vToggle                     = itemView.findViewById(R.id.v_toggle);
+            isSelected                  = false;
         }
 
         public void setOnClickItemListener() {
@@ -168,6 +190,31 @@ public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
 
             });
+        }
+
+        public void setDataChart(int A, int B, int civilians, int unknown) {
+            chartDeaths.addPieSlice(
+                    new PieModel(
+                            "A",
+                            A,
+                            R.color.chart_1));
+            chartDeaths.addPieSlice(
+                    new PieModel(
+                            "B",
+                            B,
+                            R.color.chart_2));
+            chartDeaths.addPieSlice(
+                    new PieModel(
+                            "Civilians",
+                            civilians,
+                            R.color.chart_3));
+            chartDeaths.addPieSlice(
+                    new PieModel(
+                            "Unknown",
+                            unknown,
+                            R.color.chart_4));
+
+            chartDeaths.startAnimation();
         }
     }
 

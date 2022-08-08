@@ -18,6 +18,10 @@ public class ConflictsViewModel extends ViewModel {
     final MutableLiveData<List<Conflict>> conflictsMutableLiveData = new MutableLiveData<>();
     MutableLiveData<Boolean> callApiSuccess = new MutableLiveData<>(); // use for notify UI call API fail
     boolean isLoading = false;
+    final String dmName = "test_ucdp_ged181";
+    final String token = "secret";
+    final int limit = 10;
+    int offset = 0;
 
     public MutableLiveData<List<Conflict>> getConflictsMutableLiveData() {
         return conflictsMutableLiveData;
@@ -31,7 +35,7 @@ public class ConflictsViewModel extends ViewModel {
         isLoading = true;
         addLoadingItem();
 
-        ApiService.service.getListConflicts("test_ucdp_ged181", "secret", 10, 1).enqueue(new Callback<List<Conflict>>() {
+        ApiService.service.getListConflicts(dmName, token, limit, offset).enqueue(new Callback<List<Conflict>>() {
             @Override
             public void onResponse(@NonNull Call<List<Conflict>> call, @NonNull Response<List<Conflict>> response) {
                 removeLoadingItem();
@@ -43,6 +47,8 @@ public class ConflictsViewModel extends ViewModel {
                     conflictsMutableLiveData.setValue(conflicts);
                     callApiSuccess.postValue(true);
                 }
+
+                offset += limit;
             }
 
             @Override

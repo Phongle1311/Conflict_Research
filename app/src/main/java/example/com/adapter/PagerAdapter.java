@@ -8,11 +8,11 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import example.com.fragment.ListFragment;
 import example.com.fragment.MapFragment;
 
-public class MyViewPagerAdapter extends FragmentStateAdapter {
+public class PagerAdapter extends FragmentStateAdapter {
 
     private static final int ITEM_COUNT = 2;
 
-    public MyViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
+    public PagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
     }
 
@@ -20,8 +20,8 @@ public class MyViewPagerAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         if (position == 1) {
-//            return new MapFragment();
-            return new ListFragment();
+            return new MapFragment();
+//            return new ListFragment();
         }
         return new ListFragment();
     }

@@ -2,6 +2,7 @@ package example.com.adapter;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +75,8 @@ public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             String adm1         = conflict.getAdm1();
             String adm2         = conflict.getAdm2();
 
+            // without this line, recycling dirty views will cause issues
+            conflictViewHolder.vItem.setBackgroundResource(R.drawable.normal_border);
             conflictViewHolder.tvConflictName.setText(conflict.getConflictName());
             conflictViewHolder.tvTotalDeaths.setText(String.valueOf(totalDeaths));
             conflictViewHolder.tvCountry.setText(conflict.getCountry());
@@ -122,7 +125,7 @@ public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         final TextView  tvCountry;
         final TextView  tvWhereCoordinates;
         final View      vToggle;
-        final PieChart  chartDeaths;
+        final PieChart  pieChart;
         final TextView  tvNumberDeathsOfA;
         final TextView  tvNumberDeathsOfB;
         final TextView  tvNumberDeathsOfCivilians;
@@ -143,7 +146,7 @@ public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             tvTotalDeaths               = itemView.findViewById(R.id.tv_total_deaths);
             tvCountry                   = itemView.findViewById(R.id.tv_country);
             tvWhereCoordinates          = itemView.findViewById(R.id.tv_where_coordinates);
-            chartDeaths                 = itemView.findViewById(R.id.chart_deaths);
+            pieChart                    = itemView.findViewById(R.id.chart_deaths);
             tvNumberDeathsOfA           = itemView.findViewById(R.id.tv_number_deaths_of_a);
             tvNumberDeathsOfB           = itemView.findViewById(R.id.tv_number_deaths_of_b);
             tvNumberDeathsOfCivilians   = itemView.findViewById(R.id.tv_number_deaths_of_civilians);
@@ -193,28 +196,31 @@ public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         public void setDataChart(int A, int B, int civilians, int unknown) {
-            chartDeaths.addPieSlice(
+            // without this line, recycling dirty views will cause issues
+            pieChart.clearChart();
+
+            pieChart.addPieSlice(
                     new PieModel(
                             "A",
                             A,
-                            R.color.chart_1));
-            chartDeaths.addPieSlice(
+                            Color.parseColor("#F00000")));
+            pieChart.addPieSlice(
                     new PieModel(
                             "B",
                             B,
-                            R.color.chart_2));
-            chartDeaths.addPieSlice(
+                            Color.parseColor("#00FF00")));
+            pieChart.addPieSlice(
                     new PieModel(
                             "Civilians",
                             civilians,
-                            R.color.chart_3));
-            chartDeaths.addPieSlice(
+                            Color.parseColor("#0000FF")));
+            pieChart.addPieSlice(
                     new PieModel(
                             "Unknown",
                             unknown,
-                            R.color.chart_4));
+                            Color.parseColor("#FFFF00")));
 
-            chartDeaths.startAnimation();
+//            pieChart.startAnimation();
         }
     }
 

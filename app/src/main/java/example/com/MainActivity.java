@@ -1,7 +1,6 @@
 package example.com;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
@@ -9,8 +8,7 @@ import android.os.Bundle;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import example.com.adapter.MyViewPagerAdapter;
-import example.com.fragment.MapFragment;
+import example.com.adapter.PagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         mTabLayout = findViewById(R.id.tl);
         mViewPager = findViewById(R.id.vp);
 
-        MyViewPagerAdapter mViewPagerAdapter = new MyViewPagerAdapter(this);
+        PagerAdapter mViewPagerAdapter = new PagerAdapter(this);
         mViewPager.setAdapter(mViewPagerAdapter);
 
 //        MapFragment mapFragment;

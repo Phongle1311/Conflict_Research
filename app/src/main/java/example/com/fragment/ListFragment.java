@@ -89,7 +89,9 @@ public class ListFragment extends Fragment {
             if (conflictAdapter != null) {
                 int oldSize = conflictAdapter.getItemCount();
                 conflictAdapter.setData(list);
-                conflictAdapter.notifyItemRangeChanged(oldSize, list.size());
+                // this line avoid warning:
+                //      Recyclerview - Cannot call this method in a scroll callback
+                rcvConflicts.post(() -> conflictAdapter.notifyItemRangeChanged(oldSize, list.size()));
             }
         });
 

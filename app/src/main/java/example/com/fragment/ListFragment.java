@@ -3,6 +3,7 @@ package example.com.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,9 +53,9 @@ public class ListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_list, container, false);
-        rcvConflicts = rootView.findViewById(R.id.rcv_conflicts);
-        viewModel = new ViewModelProvider(requireActivity()).get(ConflictsViewModel.class);
+        View rootView   = inflater.inflate(R.layout.fragment_list, container, false);
+        rcvConflicts    = rootView.findViewById(R.id.rcv_conflicts);
+        viewModel       = new ViewModelProvider(requireActivity()).get(ConflictsViewModel.class);
         conflictAdapter = new ConflictAdapter();
 
         return rootView;
@@ -90,8 +91,10 @@ public class ListFragment extends Fragment {
                 int oldSize = conflictAdapter.getItemCount();
                 conflictAdapter.setData(list);
                 // this line avoid warning:
-                //      Recyclerview - Cannot call this method in a scroll callback
-                rcvConflicts.post(() -> conflictAdapter.notifyItemRangeChanged(oldSize, list.size()));
+                //      --- Recyclerview - Cannot call this method in a scroll callback
+                rcvConflicts.post(() -> conflictAdapter.notifyItemRangeChanged(oldSize,
+                        list.size() - oldSize + 1));
+                Log.d("tag", list.size()+"");
             }
         });
 

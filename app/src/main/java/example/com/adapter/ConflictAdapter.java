@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,10 +22,19 @@ import example.com.model.Conflict;
 
 public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    final static int TYPE_ITEM = 0;
-    final static int TYPE_LOADING = 1;
+    final static int TYPE_ITEM      = 0;
+    final static int TYPE_LOADING   = 1;
 
     List<Conflict> mConflicts;
+    IClickButtonSeeInMap listener;
+
+    public interface IClickButtonSeeInMap {
+        void onClickButtonSeeInMap(Conflict conflict);
+    }
+
+    public ConflictAdapter(IClickButtonSeeInMap listener) {
+        this.listener = listener;
+    }
 
     public void setData(List<Conflict> conflicts) {
         this.mConflicts = conflicts;
@@ -72,6 +82,8 @@ public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             int deathsCivilians = Integer.parseInt(conflict.getDeathsCivilians());
             int deathsUnknown   = Integer.parseInt(conflict.getDeathsUnknown());
             int totalDeaths     = deathsA + deathsB + deathsCivilians + deathsUnknown;
+            String dateStart    = conflict.getDateStart();
+            String dateEnd      = conflict.getDateEnd();
             String adm1         = conflict.getAdm1();
             String adm2         = conflict.getAdm2();
 
@@ -80,7 +92,8 @@ public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             conflictViewHolder.tvConflictName.setText(conflict.getConflictName());
             conflictViewHolder.tvTotalDeaths.setText(String.valueOf(totalDeaths));
             conflictViewHolder.tvCountry.setText(conflict.getCountry());
-            conflictViewHolder.tvWhereCoordinates.setText(String.valueOf(conflict.getWhereCoordinates()));
+            conflictViewHolder.tvWhereCoordinates.setText(String.valueOf(conflict
+                    .getWhereCoordinates()));
             conflictViewHolder.vToggle.setVisibility(View.GONE);
             conflictViewHolder.tvSideA.setText(conflict.getSideA());
             conflictViewHolder.tvSideB.setText(conflict.getSideB());
@@ -91,6 +104,11 @@ public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             conflictViewHolder.tvNumberDeathsOfB.setText(conflict.getDeathsB());
             conflictViewHolder.tvNumberDeathsOfCivilians.setText(conflict.getDeathsCivilians());
             conflictViewHolder.tvNumberUnknownDeaths.setText(conflict.getDeathsUnknown());
+
+            if (dateStart.equals(dateEnd))
+                conflictViewHolder.tvDate.setText(dateStart);
+            else
+                conflictViewHolder.tvDate.setText(String.format("%s - %s", dateStart, dateEnd));
 
             if (adm1 == null || adm1.equals("")) {
                 conflictViewHolder.tvAdm1.setVisibility(View.GONE);
@@ -115,6 +133,9 @@ public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
 
             conflictViewHolder.setOnClickItemListener();
+
+            conflictViewHolder.btnSeeInMap
+                    .setOnClickListener(view -> listener.onClickButtonSeeInMap(conflict));
         }
     }
 
@@ -130,12 +151,14 @@ public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         final TextView  tvNumberDeathsOfB;
         final TextView  tvNumberDeathsOfCivilians;
         final TextView  tvNumberUnknownDeaths;
+        final TextView  tvDate;
         final TextView  tvSideA;
         final TextView  tvSideB;
         final TextView  tvAdm1;
         final TextView  tvAdm2;
         final TextView  tvSourceArticle;
         final TextView  tvSourceOriginal;
+        final Button    btnSeeInMap;
         boolean         isSelected;
 
         public ConflictViewHolder(@NonNull View itemView) {
@@ -151,6 +174,7 @@ public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             tvNumberDeathsOfB           = itemView.findViewById(R.id.tv_number_deaths_of_b);
             tvNumberDeathsOfCivilians   = itemView.findViewById(R.id.tv_number_deaths_of_civilians);
             tvNumberUnknownDeaths       = itemView.findViewById(R.id.tv_number_unknown_deaths);
+            tvDate                      = itemView.findViewById(R.id.tv_date);
             tvSideA                     = itemView.findViewById(R.id.tv_side_A);
             tvSideB                     = itemView.findViewById(R.id.tv_side_B);
             tvAdm1                      = itemView.findViewById(R.id.tv_adm_1);
@@ -158,6 +182,7 @@ public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             tvSourceArticle             = itemView.findViewById(R.id.tv_source_article);
             tvSourceOriginal            = itemView.findViewById(R.id.tv_source_original);
             vToggle                     = itemView.findViewById(R.id.v_toggle);
+            btnSeeInMap                 = itemView.findViewById(R.id.btn_see_in_map);
             isSelected                  = false;
         }
 
@@ -220,7 +245,7 @@ public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             unknown,
                             Color.parseColor("#a8006d")));
 
-//            pieChart.startAnimation();
+            pieChart.startAnimation();
         }
     }
 

@@ -10,5 +10,7 @@
     <string name="side_b">Side B:</string>
     <string name="source">Source:</string>
     <string name="deaths_of_a">Deaths of A</string>
+    <string name="date">Date:</string>
+    <string name="see_in_map">see in map</string>
 
 </resources>

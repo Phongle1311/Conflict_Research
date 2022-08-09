@@ -2,6 +2,8 @@ package example.com.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +17,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Locale;
+
 import example.com.ConflictsViewModel;
 import example.com.PaginationScrollListener;
 import example.com.R;
 import example.com.adapter.ConflictAdapter;
+import example.com.model.Conflict;
 
 /**
  * <h3>Fragment to show list of conflicts using recyclerview</h3>
@@ -55,7 +60,7 @@ public class ListFragment extends Fragment {
         View rootView   = inflater.inflate(R.layout.fragment_list, container, false);
         rcvConflicts    = rootView.findViewById(R.id.rcv_conflicts);
         viewModel       = new ViewModelProvider(requireActivity()).get(ConflictsViewModel.class);
-        conflictAdapter = new ConflictAdapter();
+        conflictAdapter = new ConflictAdapter(this::onClickButtonSeeInMap);
 
         return rootView;
     }
@@ -105,5 +110,14 @@ public class ListFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         listener = null;
+    }
+
+    public void onClickButtonSeeInMap(Conflict conflict) {
+        double latitude = Double.parseDouble(conflict.getLatitude());
+        double longitude = Double.parseDouble(conflict.getLongitude());
+
+        String uri = String.format(Locale.ENGLISH, "geo:%f,%f", latitude, longitude);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+        listener.startActivity(intent);
     }
 }

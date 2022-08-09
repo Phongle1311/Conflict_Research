@@ -203,22 +203,22 @@ public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     new PieModel(
                             "A",
                             A,
-                            Color.parseColor("#F00000")));
+                            Color.parseColor("#FFA726"))); // use R.color. ...
             pieChart.addPieSlice(
                     new PieModel(
                             "B",
                             B,
-                            Color.parseColor("#00FF00")));
+                            Color.parseColor("#66BB6A")));
             pieChart.addPieSlice(
                     new PieModel(
                             "Civilians",
                             civilians,
-                            Color.parseColor("#0000FF")));
+                            Color.parseColor("#EF5350")));
             pieChart.addPieSlice(
                     new PieModel(
                             "Unknown",
                             unknown,
-                            Color.parseColor("#FFFF00")));
+                            Color.parseColor("#a8006d")));
 
 //            pieChart.startAnimation();
         }

@@ -45,7 +45,17 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
-    // Chart and graph library
+    // chart and graph library
     implementation 'com.github.blackfizz:eazegraph:1.2.5l@aar'
     implementation 'com.nineoldandroids:library:2.4.0'
+
+    // room database
+    implementation "androidx.room:room-runtime:2.4.3"
+    annotationProcessor "androidx.room:room-compiler:2.4.3"
+
+    // work manager
+    implementation "androidx.work:work-runtime:2.7.1"
+
+    // gson
+    implementation 'com.google.code.gson:gson:2.9.1'
 }

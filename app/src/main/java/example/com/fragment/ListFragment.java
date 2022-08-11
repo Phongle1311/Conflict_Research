@@ -79,7 +79,7 @@ public class ListFragment extends Fragment {
 
             @Override
             public void loadMoreItems() {
-                viewModel.callApiGetConflicts();
+                viewModel.getData(requireActivity());
             }
 
             @Override
@@ -102,7 +102,7 @@ public class ListFragment extends Fragment {
         });
 
         // call for the first time (no need scrolling)
-        viewModel.callApiGetConflicts();
+        viewModel.getData(requireActivity());
     }
 
     // release context
@@ -113,8 +113,8 @@ public class ListFragment extends Fragment {
     }
 
     public void onClickButtonSeeInMap(Conflict conflict) {
-        double latitude = Double.parseDouble(conflict.getLatitude());
-        double longitude = Double.parseDouble(conflict.getLongitude());
+        double latitude = conflict.getLatitude();
+        double longitude = conflict.getLongitude();
 
         String uri = String.format(Locale.ENGLISH, "geo:%f,%f", latitude, longitude);
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));

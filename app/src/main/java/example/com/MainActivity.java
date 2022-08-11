@@ -25,10 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         PagerAdapter mViewPagerAdapter = new PagerAdapter(this);
         mViewPager.setAdapter(mViewPagerAdapter);
-
-//        MapFragment mapFragment;
-//        FragmentManager fragmentManager = this.getSupportFragmentManager();
-//        mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.fragment_map);
+        mViewPager.setUserInputEnabled(false);
 
         new TabLayoutMediator(mTabLayout, mViewPager, (tab, position) -> {
             switch(position) {

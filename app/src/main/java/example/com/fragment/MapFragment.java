@@ -7,7 +7,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -35,7 +34,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     @Override
     public void onAttach(@NonNull Activity activity) {
         super.onAttach(activity);
-        this.listener = (FragmentActivity) activity;
+        this.listener = activity;
     }
 
     @Override
@@ -46,6 +45,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     @Override
     public void onMapReady(@NonNull final GoogleMap googleMap) {
         this.googleMap = googleMap;
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
 
         setUpClusterer();
 
@@ -59,8 +59,8 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
                 // if isn't loading item, add marker
                 if (!conflict.isLoading()) {
-                    double lat = Double.parseDouble(conflict.getLatitude());
-                    double lng = Double.parseDouble(conflict.getLongitude());
+                    double lat = conflict.getLatitude();
+                    double lng = conflict.getLongitude();
                     String title = conflict.getConflictName();
                     String snippet = "add desc ...";
 
@@ -78,14 +78,11 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     }
 
     void setUpClusterer() {
-        // sửa lại thành việt nam
-//        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.503186, -0.126446), 10));
-
         clusterManager = new ClusterManager<>(listener, googleMap);
 
         clusterManager.setAnimation(false);
 
         googleMap.setOnCameraIdleListener(clusterManager);
-        googleMap.setOnMarkerClickListener(clusterManager); // nghiên cứu sau
+        googleMap.setOnMarkerClickListener(clusterManager);
     }
 }

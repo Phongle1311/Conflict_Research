@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.eazegraph.lib.charts.PieChart;
 import org.eazegraph.lib.models.PieModel;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import example.com.R;
@@ -77,10 +78,10 @@ public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             ConflictViewHolder conflictViewHolder = (ConflictViewHolder) holder;
 
-            int deathsA         = Integer.parseInt(conflict.getDeathsA());
-            int deathsB         = Integer.parseInt(conflict.getDeathsB());
-            int deathsCivilians = Integer.parseInt(conflict.getDeathsCivilians());
-            int deathsUnknown   = Integer.parseInt(conflict.getDeathsUnknown());
+            int deathsA         = conflict.getDeathsA();
+            int deathsB         = conflict.getDeathsB();
+            int deathsCivilians = conflict.getDeathsCivilians();
+            int deathsUnknown   = conflict.getDeathsUnknown();
             int totalDeaths     = deathsA + deathsB + deathsCivilians + deathsUnknown;
             String dateStart    = conflict.getDateStart();
             String dateEnd      = conflict.getDateEnd();
@@ -100,10 +101,14 @@ public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             conflictViewHolder.setDataChart(deathsA, deathsB, deathsCivilians, deathsUnknown);
 
-            conflictViewHolder.tvNumberDeathsOfA.setText(conflict.getDeathsA());
-            conflictViewHolder.tvNumberDeathsOfB.setText(conflict.getDeathsB());
-            conflictViewHolder.tvNumberDeathsOfCivilians.setText(conflict.getDeathsCivilians());
-            conflictViewHolder.tvNumberUnknownDeaths.setText(conflict.getDeathsUnknown());
+            conflictViewHolder.tvNumberDeathsOfA
+                    .setText(MessageFormat.format("{0}", deathsA));
+            conflictViewHolder.tvNumberDeathsOfB
+                    .setText(MessageFormat.format("{0}", deathsB));
+            conflictViewHolder.tvNumberDeathsOfCivilians
+                    .setText(MessageFormat.format("{0}", deathsCivilians));
+            conflictViewHolder.tvNumberUnknownDeaths
+                    .setText(MessageFormat.format("{0}", deathsUnknown));
 
             if (dateStart.equals(dateEnd))
                 conflictViewHolder.tvDate.setText(dateStart);
@@ -228,7 +233,7 @@ public class ConflictAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     new PieModel(
                             "A",
                             A,
-                            Color.parseColor("#FFA726"))); // use R.color. ...
+                            Color.parseColor("#FFA726")));
             pieChart.addPieSlice(
                     new PieModel(
                             "B",

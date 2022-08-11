@@ -19,10 +19,9 @@ public class PagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        if (position == 1) {
+        if (position == 1)
             return new MapFragment();
-//            return new ListFragment();
-        }
+
         return new ListFragment();
     }
 

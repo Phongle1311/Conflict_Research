@@ -1,27 +1,32 @@
 package example.com.model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
+@Entity(tableName = "conflictEntity")
 public class Conflict {
+    @PrimaryKey
+    int id;
     @SerializedName("country_id")
-    String countryId;
+    int countryId;
     String region;
     @SerializedName("date_start")
     String dateStart;
     @SerializedName("date_end")
     String dateEnd;
     @SerializedName("deaths_a")
-    String deathsA;
+    int deathsA;
     @SerializedName("deaths_b")
-    String deathsB;
+    int deathsB;
     @SerializedName("deaths_civilians")
-    String deathsCivilians;
+    int deathsCivilians;
     @SerializedName("deaths_unknown")
-    String deathsUnknown;
-    String id;
-    String year;
+    int deathsUnknown;
+    int year;
     @SerializedName("conflict_new_id")
-    String conflictNewId;
+    int conflictNewId;
     @SerializedName("conflict_name")
     String conflictName;
     @SerializedName("dyad_new_id")
@@ -48,8 +53,8 @@ public class Conflict {
     String adm1;
     @SerializedName("adm_2")
     String adm2;
-    String latitude;
-    String longitude;
+    double latitude;
+    double longitude;
     String country;
     boolean isLoading;
 
@@ -59,7 +64,7 @@ public class Conflict {
         this.isLoading = isLoading;
     }
 
-    public Conflict(String id, String conflict_name, String latitude, String longitude, String country) {
+    public Conflict(int id, String conflict_name, double latitude, double longitude, String country) {
         this.id = id;
         this.conflictName = conflict_name;
         this.latitude = latitude;
@@ -67,11 +72,11 @@ public class Conflict {
         this.country = country;
     }
 
-    public String getCountryId() {
+    public int getCountryId() {
         return countryId;
     }
 
-    public void setCountryId(String countryId) {
+    public void setCountryId(int countryId) {
         this.countryId = countryId;
     }
 
@@ -99,59 +104,59 @@ public class Conflict {
         this.dateEnd = dateEnd;
     }
 
-    public String getDeathsA() {
+    public int getDeathsA() {
         return deathsA;
     }
 
-    public void setDeathsA(String deathsA) {
+    public void setDeathsA(int deathsA) {
         this.deathsA = deathsA;
     }
 
-    public String getDeathsB() {
+    public int getDeathsB() {
         return deathsB;
     }
 
-    public void setDeathsB(String deathsB) {
+    public void setDeathsB(int deathsB) {
         this.deathsB = deathsB;
     }
 
-    public String getDeathsCivilians() {
+    public int getDeathsCivilians() {
         return deathsCivilians;
     }
 
-    public void setDeathsCivilians(String deathsCivilians) {
+    public void setDeathsCivilians(int deathsCivilians) {
         this.deathsCivilians = deathsCivilians;
     }
 
-    public String getDeathsUnknown() {
+    public int getDeathsUnknown() {
         return deathsUnknown;
     }
 
-    public void setDeathsUnknown(String deathsUnknown) {
+    public void setDeathsUnknown(int deathsUnknown) {
         this.deathsUnknown = deathsUnknown;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getYear() {
+    public int getYear() {
         return year;
     }
 
-    public void setYear(String year) {
+    public void setYear(int year) {
         this.year = year;
     }
 
-    public String getConflictNewId() {
+    public int getConflictNewId() {
         return conflictNewId;
     }
 
-    public void setConflictNewId(String conflictNewId) {
+    public void setConflictNewId(int conflictNewId) {
         this.conflictNewId = conflictNewId;
     }
 
@@ -259,19 +264,19 @@ public class Conflict {
         this.adm2 = adm2;
     }
 
-    public String getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
@@ -282,7 +287,6 @@ public class Conflict {
     public void setCountry(String country) {
         this.country = country;
     }
-
 
     public boolean isLoading() {
         return isLoading;

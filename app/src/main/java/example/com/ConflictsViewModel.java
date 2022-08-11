@@ -91,6 +91,8 @@ public class ConflictsViewModel extends ViewModel {
 
                                     conflicts.addAll(list);
                                     conflictsMutableLiveData.setValue(conflicts);
+
+                                    offset += list.size();
                                 }
                                 // if database is out of data, call API and set shouldFetchAPI true
                                 else {
@@ -121,6 +123,8 @@ public class ConflictsViewModel extends ViewModel {
                 if (list != null){
                     conflicts.addAll(list);
                     conflictsMutableLiveData.setValue(conflicts);
+
+                    offset += list.size();
                 }
 
                 Gson gson = new Gson();
